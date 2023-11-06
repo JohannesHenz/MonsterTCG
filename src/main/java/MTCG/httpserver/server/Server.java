@@ -1,7 +1,7 @@
 package MTCG.httpserver.server;
 
-import at.fhtw.httpserver.utils.RequestHandler;
-import at.fhtw.httpserver.utils.Router;
+import MTCG.httpserver.utils.RequestHandler;
+import MTCG.httpserver.utils.Router;
 
 import java.io.IOException;
 import java.net.ServerSocket;

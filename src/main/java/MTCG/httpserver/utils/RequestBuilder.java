@@ -1,7 +1,7 @@
 package MTCG.httpserver.utils;
 
-import at.fhtw.httpserver.http.Method;
-import at.fhtw.httpserver.server.Request;
+import MTCG.httpserver.http.Method;
+import MTCG.httpserver.server.Request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
