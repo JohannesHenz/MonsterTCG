@@ -1,6 +1,6 @@
-package MTCG.httpserver.utils;
+package src.main.java.MTCG.httpserver.utils;
 
-import MTCG.httpserver.server.Service;
+import src.main.java.MTCG.httpserver.server.Service;
 
 import java.util.HashMap;
 import java.util.Map;

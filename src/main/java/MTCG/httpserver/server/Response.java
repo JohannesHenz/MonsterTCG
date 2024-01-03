@@ -1,7 +1,7 @@
-package MTCG.httpserver.server;
+package src.main.java.MTCG.httpserver.server;
 
-import MTCG.httpserver.http.ContentType;
-import MTCG.httpserver.http.HttpStatus;
+import src.main.java.MTCG.httpserver.http.ContentType;
+import src.main.java.MTCG.httpserver.http.HttpStatus;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;

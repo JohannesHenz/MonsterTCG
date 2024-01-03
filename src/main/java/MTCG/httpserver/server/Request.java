@@ -1,6 +1,6 @@
-package MTCG.httpserver.server;
+package src.main.java.MTCG.httpserver.server;
 
-import MTCG.httpserver.http.Method;
+import src.main.java.MTCG.httpserver.http.Method;
 
 import java.util.ArrayList;
 import java.util.List;
