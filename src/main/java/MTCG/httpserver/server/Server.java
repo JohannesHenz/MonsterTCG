@@ -1,7 +1,7 @@
-package src.main.java.MTCG.httpserver.server;
+package MTCG.httpserver.server;
 
-import src.main.java.MTCG.httpserver.utils.RequestHandler;
-import src.main.java.MTCG.httpserver.utils.Router;
+import MTCG.httpserver.utils.RequestHandler;
+import MTCG.httpserver.utils.Router;
 
 import java.io.IOException;
 import java.net.ServerSocket;

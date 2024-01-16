@@ -1,9 +1,10 @@
-package src.main.java.MTCG.httpserver.utils;
+package MTCG.httpserver.utils;
 
-import src.main.java.MTCG.httpserver.http.ContentType;
-import src.main.java.MTCG.httpserver.http.HttpStatus;
-import src.main.java.MTCG.httpserver.server.Request;
-import src.main.java.MTCG.httpserver.server.Response;
+
+import MTCG.httpserver.server.Request;
+import MTCG.httpserver.server.Response;
+import MTCG.httpserver.http.ContentType;
+import MTCG.httpserver.http.HttpStatus;
 
 import java.io.BufferedReader;
 import java.io.IOException;

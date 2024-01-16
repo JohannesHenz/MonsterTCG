@@ -1,4 +1,4 @@
-package MonsterTCG.src.main.java.MTCG.controllers;
+package MTCG.controllers;
 
 public class UserController {
 

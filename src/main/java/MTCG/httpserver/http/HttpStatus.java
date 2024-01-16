@@ -1,4 +1,4 @@
-package src.main.java.MTCG.httpserver.http;
+package MTCG.httpserver.http;
 
 public enum HttpStatus {
     OK(200, "OK"),

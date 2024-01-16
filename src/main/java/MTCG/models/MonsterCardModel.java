@@ -1,4 +1,4 @@
-package src.main.java.MTCG.models;
+package MTCG.models;
 
 public class MonsterCardModel extends CardModel{
 }

@@ -1,4 +1,4 @@
-package src.main.java.MTCG.httpserver.http;
+package MTCG.httpserver.http;
 
 public enum ContentType {
     PLAIN_TEXT("text/plain"),
