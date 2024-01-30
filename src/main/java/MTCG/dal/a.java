@@ -1,4 +1,4 @@
-package MTCG.dao;
+package MTCG.dal;
 
 public class a {
 }
