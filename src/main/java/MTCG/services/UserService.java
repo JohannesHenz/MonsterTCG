@@ -21,4 +21,6 @@ public class UserService {
         UserCredentialsModel newUser = new UserCredentialsModel(username, password);
         userRepository.save(newUser);
     }
+
+
 }

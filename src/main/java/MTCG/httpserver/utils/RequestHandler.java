@@ -33,17 +33,24 @@ public class RequestHandler implements Runnable {
 
             if (request.getPathname() == null) {
                 response = new Response(
-                    HttpStatus.BAD_REQUEST,
-                    ContentType.JSON,
-                    "[]"
+                        HttpStatus.BAD_REQUEST,
+                        ContentType.JSON,
+                        "[]"
                 );
             } else {
-                response = this.router.resolve(request.getServiceRoute()).handleRequest(request);
+                //hier wird gecheckt ob der gewollte Service existiert
+                var service = this.router.resolve(request.getServiceRoute());
+                if (service == null) {
+                    response = new Response(
+                            HttpStatus.NOT_FOUND,
+                            ContentType.JSON,
+                            "{\"error\": \"Service not found\"}"
+                    );
+                } else {
+                    response = service.handleRequest(request);
+                }
             }
 
-            //My Code
-
-            //End of My Code
             printWriter.write(response.get());
         } catch (IOException e) {
             System.err.println(Thread.currentThread().getName() + " Error: " + e.getMessage());
