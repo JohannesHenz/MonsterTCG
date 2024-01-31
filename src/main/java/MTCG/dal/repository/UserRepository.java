@@ -1,4 +1,4 @@
-package MTCG.dal;
+package MTCG.dal.repository;
 
 public class UserRepository {
     public void saveUser(User user) {

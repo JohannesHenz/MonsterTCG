@@ -1,6 +1,6 @@
 package MTCG.services;
 
-import MTCG.dal.UserRepository;
+import MTCG.dal.repository.UserRepository;
 import MTCG.models.UserCredentialsModel;
 
 public class UserService {
