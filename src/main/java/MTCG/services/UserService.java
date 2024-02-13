@@ -12,6 +12,7 @@ public class UserService {
     }
 
     public void createUser(String username, String password) {
+       /*
         boolean userExists = userRepository.userExists(username);
 
         if (userExists) {
@@ -20,7 +21,9 @@ public class UserService {
 
         UserCredentialsModel newUser = new UserCredentialsModel(username, password);
         userRepository.save(newUser);
+    */
     }
+
 
 
 }

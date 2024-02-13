@@ -1,5 +1,6 @@
 package MTCG;
 
+import MTCG.dal.DataBaseHelper;
 import MTCG.httpserver.server.Server;
 import MTCG.httpserver.utils.Router;
 public class Main {
@@ -10,9 +11,13 @@ public class Main {
 
         int port = 10001;
         Server server = new Server(port, router);
+        DataBaseHelper db = new DataBaseHelper();
 
         try {
+            db.initializeDB();
             server.start();
+
+
         } catch (Exception e){
             e.printStackTrace();
         }
