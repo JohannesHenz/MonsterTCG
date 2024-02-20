@@ -3,8 +3,8 @@ package MTCG.dal.uow;
 public class UnitOfWork implements IUnitOfWork{
 
     @Override
-    public void commit() {
-
+    public boolean commit() {
+        return false;
     }
 
     @Override

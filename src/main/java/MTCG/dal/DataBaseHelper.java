@@ -15,6 +15,7 @@ public class DataBaseHelper {
     private static final String PASSWORD = "postgres";
 
     public void initializeDB() {
+       // Class.forName("org.postgresql.Driver");
         try (Connection connection = DriverManager.getConnection(CONNECTION_STRING, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement("SELECT 1 AS isExists FROM pg_database WHERE datname=?")) {
 
@@ -45,43 +46,100 @@ public class DataBaseHelper {
 
     private void createTablesIfNotExist(Statement statement) throws SQLException {
 
-        /*
-        try {
-            // Drop the type if it exists
-            statement.execute("DROP TYPE IF EXISTS CardTypes CASCADE");
-        } catch (SQLException ignored) {
-            // Ignore exception if the type does not exist
-        }
+        String createCardTable = "CREATE TABLE IF NOT EXISTS Card (" +
+                "CardName VARCHAR(50) PRIMARY KEY NOT NULL," +
+                "Damage INT NOT NULL," +
+                "ElementType VARCHAR(50) NOT NULL," +
+                "UNIQUE (CardName)" +
+                ");";
+        statement.execute(createCardTable);
 
-        // Create the type
-        String enumValues = Arrays.stream(CardTypes.values())
-                .map(Enum::name)
-                .collect(Collectors.joining("', '", "'", "'"));
-        statement.execute("CREATE TYPE CardTypes AS ENUM (" + enumValues + ")");
-
-        try {
-            // Drop the type if it exists
-            statement.execute("DROP TYPE IF EXISTS CardNames CASCADE");
-        } catch (SQLException ignored) {
-            // Ignore exception if the type does not exist
-        }
-
-        // Create the type
-        enumValues = Arrays.stream(CardNames.values())
-                .map(Enum::name)
-                .collect(Collectors.joining("', '", "'", "'"));
-        statement.execute("CREATE TYPE CardNames AS ENUM (" + enumValues + ")");
+        String createUserTable = "CREATE TABLE IF NOT EXISTS \"User\" (" +
+                "Username VARCHAR(50) PRIMARY KEY NOT NULL," +
+                "Password VARCHAR(50) NOT NULL," +
+                "IsAdmin BOOLEAN NOT NULL," +
+                "CoinAmount INT NOT NULL," +
+                "OwnedCardAmount INT NOT NULL" +
+                ");";
+        statement.execute(createUserTable);
 
 
-*/
 
-        //TODO: Check if the types already exist
-        //statement.execute("CREATE TYPE CardTypes AS ENUM ('MONSTER', 'SPELL')");
-        //statement.execute("CREATE TYPE CardNames AS ENUM ('WATERGOBLIN, FIREGOBLIN, REGULARGOBLIN, WATERTROLL, FIRETROLL, REGULARTROLL, WATERELF, FIREELF, REGULARELF, WATERSPELL, FIRESPELL, REGULARSPELL, KNIGHT, DRAGON, ORK, KRAKEN')");
-        statement.execute("CREATE TABLE IF NOT EXISTS UserCredentials (username VARCHAR(50) PRIMARY KEY NOT NULL, password VARCHAR(50) NOT NULL)");
-        statement.execute("CREATE TABLE IF NOT EXISTS UserData (name VARCHAR(50) PRIMARY KEY NOT NULL, bio VARCHAR(200), image VARCHAR(200))");
-        statement.execute("CREATE TABLE IF NOT EXISTS UserStats (name VARCHAR(50) PRIMARY KEY NOT NULL, elo INT NOT NULL, wins INT NOT NULL, losses INT NOT NULL)");
-        statement.execute("CREATE TABLE IF NOT EXISTS Card (id uuid PRIMARY KEY, name VARCHAR(50) NOT NULL, damage float NOT NULL)");
-        statement.execute("CREATE TABLE IF NOT EXISTS TradingDeal (id uuid PRIMARY KEY, cardToTrade uuid NOT NULL, type VARCHAR(50) NOT NULL, minimumDamage float NOT NULL)");
+        String createDeckTable = "CREATE TABLE IF NOT EXISTS Deck (" +
+                "Owner VARCHAR(50) NOT NULL," +
+                "Card1 VARCHAR(50)," +
+                "Card2 VARCHAR(50)," +
+                "Card3 VARCHAR(50)," +
+                "Card4 VARCHAR(50)," +
+                "FOREIGN KEY (Owner) REFERENCES  \"User\"(Username)," +
+                "FOREIGN KEY (Card1) REFERENCES Card(CardName)," +
+                "FOREIGN KEY (Card2) REFERENCES Card(CardName)," +
+                "FOREIGN KEY (Card3) REFERENCES Card(CardName)," +
+                "FOREIGN KEY (Card4) REFERENCES Card(CardName)" +
+                ");";
+        statement.execute(createDeckTable);
+/*
+
+        String createDeckTable = "CREATE TABLE IF NOT EXISTS Deck (" +
+                "DeckId SERIAL PRIMARY KEY," +
+                "Owner VARCHAR(50) NOT NULL," +
+                "FOREIGN KEY (Owner) REFERENCES  \"User\"(Username)" +
+                ");";
+
+        String createDeckCardTable = "CREATE TABLE IF NOT EXISTS DeckCard(" +
+                "DeckId INT NOT NULL," +
+                "CardName VARCHAR(50) NOT NULL," +
+                "FOREIGN KEY (DeckId) REFERENCES Deck(DeckId)," +
+                "FOREIGN KEY (CardName) REFERENCES Card(CardName)" +
+                ");";
+        statement.execute(createDeckTable);
+        statement.execute(createDeckCardTable);
+
+
+
+ */
+        String createTradingDealTable = "CREATE TABLE IF NOT EXISTS TradingDeal (" +
+                "Id VARCHAR(50) PRIMARY KEY NOT NULL," +
+                "FromPlayer VARCHAR(50) NOT NULL," +
+                "ToPlayer VARCHAR(50) NOT NULL," +
+                "FOREIGN KEY (FromPlayer) REFERENCES \"User\"(Username)," +
+                "FOREIGN KEY (ToPlayer) REFERENCES \"User\"(Username)" +
+                ");";
+        statement.execute(createTradingDealTable);
+
+        String createStatsTable = "CREATE TABLE IF NOT EXISTS Stats (" +
+                " \"User\" VARCHAR(50) NOT NULL," +
+                "ELO INT NOT NULL," +
+                "Wins INT NOT NULL," +
+                "Losses INT NOT NULL," +
+                "FOREIGN KEY (\"User\") REFERENCES  \"User\"(Username)" +
+                ");";
+        statement.execute(createStatsTable);
+
+        String createStackTable = "CREATE TABLE IF NOT EXISTS Stack (" +
+                "Owner VARCHAR(50) NOT NULL," +
+                "Card1 VARCHAR(50)," +
+                "FOREIGN KEY (Owner) REFERENCES  \"User\"(Username)," +
+                "FOREIGN KEY (Card1) REFERENCES Card(CardName)" +
+                ");";
+        statement.execute(createStackTable);
+
+        String createPackageTable = "CREATE TABLE IF NOT EXISTS Package (" +
+                "Id VARCHAR(50) PRIMARY KEY NOT NULL," +
+                "Card1 VARCHAR(50)," +
+                "Card2 VARCHAR(50)," +
+                "Card3 VARCHAR(50)," +
+                "Card4 VARCHAR(50)," +
+                "Card5 VARCHAR(50)," +
+                "IsOwned BOOLEAN NOT NULL," +
+                "Owner VARCHAR(50)," +
+                "FOREIGN KEY (Owner) REFERENCES  \"User\"(Username)," +
+                "FOREIGN KEY (Card1) REFERENCES Card(CardName)," +
+                "FOREIGN KEY (Card2) REFERENCES Card(CardName)," +
+                "FOREIGN KEY (Card3) REFERENCES Card(CardName)," +
+                "FOREIGN KEY (Card4) REFERENCES Card(CardName)," +
+                "FOREIGN KEY (Card5) REFERENCES Card(CardName)" +
+                ");";
+        statement.execute(createPackageTable);
     }
-}
+    }

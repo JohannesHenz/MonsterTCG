@@ -1,4 +1,4 @@
 package MTCG.dal.repository;
 
-public class CardRepository {
+public class PackageRepository {
 }
