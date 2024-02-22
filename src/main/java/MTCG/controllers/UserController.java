@@ -1,11 +1,13 @@
 package MTCG.controllers;
 
+import MTCG.dal.repository.UserRepository;
 import MTCG.httpserver.http.ContentType;
 import MTCG.httpserver.http.HttpStatus;
 import MTCG.httpserver.http.Method;
 import MTCG.httpserver.server.Request;
 import MTCG.httpserver.server.Response;
 import MTCG.httpserver.server.Service;
+import MTCG.services.UserService;
 
 public class UserController implements Service {
 
@@ -31,15 +33,23 @@ public class UserController implements Service {
         );
     }
 
+
     private Response Registration(Request request) {
-        // Registration logic goes here.
-        // You can create your Response based on the logic and return it.
-        return new Response(
-                HttpStatus.OK,
-                ContentType.JSON,
-                "{'message': 'Registration successful'}"
-        );
+        String requestBody = request.getBody();
+        String username = requestBody.split("\"Username\":")[1].split(",")[0].replaceAll("\"", "").trim();
+        String password = requestBody.split("\"Password\":")[1].split("}")[0].replaceAll("\"", "").trim();
+        boolean isAdmin = false;
+
+        if (username.equals("admin") && password.equals("istrator")) {
+            isAdmin = true;
+        }
+
+        // Call the createUser method in the UserService class
+        UserRepository userRepository = new UserRepository();
+        UserService userService = new UserService(userRepository);
+        return userService.createUser(username, password, isAdmin);
     }
+
 
     private Response showUsers(Request request){
 

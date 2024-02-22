@@ -16,7 +16,7 @@ public class DataBaseHelper {
 
     public void initializeDB() {
        // Class.forName("org.postgresql.Driver");
-        try (Connection connection = DriverManager.getConnection(CONNECTION_STRING, USER, PASSWORD);
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/", USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement("SELECT 1 AS isExists FROM pg_database WHERE datname=?")) {
 
             statement.setString(1, DATABASE_NAME);
@@ -40,7 +40,7 @@ public class DataBaseHelper {
 
     private void createDatabase(Connection connection, String databaseName) throws SQLException {
         try (Statement statement = connection.createStatement()) {
-            statement.execute("CREATE DATABASE IF NOT EXISTS " + databaseName);
+            statement.execute("CREATE DATABASE " + databaseName);
         }
     }
 

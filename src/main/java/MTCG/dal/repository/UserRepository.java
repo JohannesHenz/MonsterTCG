@@ -1,21 +1,20 @@
 package MTCG.dal.repository;
 
-import MTCG.models.UserCredentialsModel;
-import MTCG.models.UserDataModel;
-import MTCG.models.UserStatsModel;
+import MTCG.dal.repository.repoUOWs.UserUOW;
+import MTCG.models.UserModel;
+
 public class UserRepository {
 
-    UserCredentialsModel user = new UserCredentialsModel();
-/*
-    public void saveUser(User user) {
+    public boolean userExists(String username) {
+        // Implement your logic to check if a user with the given username exists in the database
+        // Return true if the user exists, false otherwise
+        return false;
     }
-    public User getUser(String username) {
-    }
-    public List<User> getAllUsers() {
-    }
-    public boolean userExists(String username){
+    public void save(UserModel user) {
+        String sql = "INSERT INTO \"User\" (Username, Password, IsAdmin, CoinAmount, OwnedCardAmount) VALUES (?, ?, ?, ?, ?)";
 
+        UserUOW userUOW = new UserUOW(sql, user.getUsername(), user.getPassword(), user.getAdminStatus(), user.getCoinAmount(), user.getOwnedCardAmount());
+        userUOW.commit();
     }
-*/
 
 }
