@@ -7,13 +7,4 @@ public class UnitOfWork implements IUnitOfWork{
         return false;
     }
 
-    @Override
-    public void rollback(){
-
-    }
-
-    public void beginTransaction(){
-
-    }
-
 }
