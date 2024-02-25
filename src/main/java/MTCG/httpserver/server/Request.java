@@ -14,13 +14,17 @@ public class Request {
     private HeaderMap headerMap =  new HeaderMap();
     private String body;
 
-    public String getServiceRoute(){
-        if (this.pathParts == null ||
-                this.pathParts.isEmpty()) {
+    public String getServiceRoute() {
+        if (this.pathParts == null || this.pathParts.isEmpty()) {
             return null;
         }
 
-        return '/' + this.pathParts.get(0);
+        StringBuilder serviceRoute = new StringBuilder();
+        for (String part : this.pathParts) {
+            serviceRoute.append('/').append(part);
+        }
+
+        return serviceRoute.toString();
     }
 
     public String getUrlContent(){

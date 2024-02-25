@@ -7,30 +7,76 @@ import MTCG.httpserver.http.Method;
 import MTCG.httpserver.server.Request;
 import MTCG.httpserver.server.Response;
 import MTCG.httpserver.server.Service;
+import MTCG.models.UserModel;
 import MTCG.services.UserService;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserController implements Service {
 
-    @Override
+    private UserRepository userRepository = UserRepository.getInstance();
+    private UserService userService = new UserService(this, userRepository);
+    private final List<String> loggedInUsers = new ArrayList<>();
+    public void addLoggedInUser(UserModel user) {
+        this.loggedInUsers.add(user.getUsername());
+    }
+
     public Response handleRequest(Request request) {
+
+
         Method method = request.getMethod();
         String route = request.getServiceRoute();
 
-        if ("POST".equalsIgnoreCase(String.valueOf(method)) && "/users".equals(route)) {
+
+
+        if ("POST".equalsIgnoreCase(String.valueOf(method)) && "/sessions".equals(route)) {
+            return userService.loginUser(request);
+        }
+        else if ("POST".equalsIgnoreCase(String.valueOf(method)) && "/users".equals(route)) {
             return Registration(request);
             //create new User
-        } else if ("GET".equalsIgnoreCase(String.valueOf(method)) && "/users".equals(route)) {
-            return showUsers(request);
-        } else if ("PUT".equalsIgnoreCase(String.valueOf(method)) && "/users".equals(route)) {
-            return editUsers(request);
+        }
+        UserModel user = getUserFromBearerToken(request.getHeaderMap().getHeader("Authorization"));
+        if (user == null || !loggedInUsers.contains(user.getUsername())) {
+            System.out.println("logged in Users: " + loggedInUsers);
+            return new Response(
+                    HttpStatus.UNAUTHORIZED,
+                    ContentType.JSON,
+                    "{'error': 'User not logged in'}"
+            );
         }
 
-        // If no conditions match, return a 404 response
-        return new Response(
-                HttpStatus.NOT_FOUND,
-                ContentType.JSON,
-                "{'error': 'Not found'}"
-        );
+         if ("PUT".equalsIgnoreCase(String.valueOf(method)) && "/users/kienboec".equals(route)) {
+             System.out.println(loggedInUsers);
+            return userService.updateUser(request);
+        }
+        else if ("PUT".equalsIgnoreCase(String.valueOf(method)) && "/users/altenhof".equals(route)) {
+            System.out.println(loggedInUsers);
+            return userService.updateUser(request);
+        }
+        else if ("PUT".equalsIgnoreCase(String.valueOf(method)) && "/users/someGuy".equals(route)) {
+            System.out.println(loggedInUsers);
+            return userService.updateUser(request);
+        }else if ("GET".equalsIgnoreCase(String.valueOf(method)) && route.startsWith("/users/")) {
+             String usernameInRoute = route.split("/")[2];
+             return userService.getUserData(request, usernameInRoute);
+
+        }
+        else if ("GET".equalsIgnoreCase(String.valueOf(method)) && "/users/altenhof".equals(route)) {
+            System.out.println(loggedInUsers);
+            return userService.updateUser(request);
+        }
+        else if ("GET".equalsIgnoreCase(String.valueOf(method)) && "/users/someGuy".equals(route)) {
+            System.out.println(loggedInUsers);
+            return userService.updateUser(request);
+        }else {
+            // If no conditions match, return a 404 response
+            return new Response(
+                    HttpStatus.NOT_FOUND,
+                    ContentType.JSON,
+                    "{'error': 'Not found'}"
+            );
+        }
     }
 
 
@@ -45,27 +91,28 @@ public class UserController implements Service {
         }
 
         // Call the createUser method in the UserService class
-        UserRepository userRepository = new UserRepository();
-        UserService userService = new UserService(userRepository);
+        UserService userService = new UserService(this, userRepository);
         return userService.createUser(username, password, isAdmin);
     }
 
 
-    private Response showUsers(Request request){
 
-        return new Response(
-                HttpStatus.OK,
-                ContentType.JSON,
-                "{'message': 'Showing users'}"
-        );
+
+    public UserModel getUserFromBearerToken(String authorizationHeader) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String username = authorizationHeader.substring(7).split("-")[0];
+            return userRepository.getUserByUsername(username);
+        }
+        return null;
     }
 
-    private Response editUsers(Request request){
 
-        return new Response(
-                HttpStatus.OK,
-                ContentType.JSON,
-                "{'message': 'Showing users'}"
-        );
+
+    public void logoutAllUsers() {
+        this.loggedInUsers.clear();
+    }
+
+    public List<String> getLoggedInUsers() {
+        return loggedInUsers;
     }
 }

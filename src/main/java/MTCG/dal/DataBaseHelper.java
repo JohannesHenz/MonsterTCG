@@ -47,10 +47,10 @@ public class DataBaseHelper {
     private void createTablesIfNotExist(Statement statement) throws SQLException {
 
         String createCardTable = "CREATE TABLE IF NOT EXISTS Card (" +
-                "CardName VARCHAR(50) PRIMARY KEY NOT NULL," +
-                "Damage INT NOT NULL," +
-                "ElementType VARCHAR(50) NOT NULL," +
-                "UNIQUE (CardName)" +
+                "Id VARCHAR (100) PRIMARY KEY NOT NULL," +
+                "Name VARCHAR(50) NOT NULL," +
+                "Damage FLOAT NOT NULL," +
+                "UNIQUE (Id)" +
                 ");";
         statement.execute(createCardTable);
 
@@ -59,7 +59,10 @@ public class DataBaseHelper {
                 "Password VARCHAR(50) NOT NULL," +
                 "IsAdmin BOOLEAN NOT NULL," +
                 "CoinAmount INT NOT NULL," +
-                "OwnedCardAmount INT NOT NULL" +
+                "OwnedCardAmount INT NOT NULL," +
+                "Name VARCHAR(50)," +
+                "Bio VARCHAR(50)," +
+                "Image VARCHAR(50)" +
                 ");";
         statement.execute(createUserTable);
 
@@ -72,10 +75,10 @@ public class DataBaseHelper {
                 "Card3 VARCHAR(50)," +
                 "Card4 VARCHAR(50)," +
                 "FOREIGN KEY (Owner) REFERENCES  \"User\"(Username)," +
-                "FOREIGN KEY (Card1) REFERENCES Card(CardName)," +
-                "FOREIGN KEY (Card2) REFERENCES Card(CardName)," +
-                "FOREIGN KEY (Card3) REFERENCES Card(CardName)," +
-                "FOREIGN KEY (Card4) REFERENCES Card(CardName)" +
+                "FOREIGN KEY (Card1) REFERENCES Card(Id)," +
+                "FOREIGN KEY (Card2) REFERENCES Card(Id)," +
+                "FOREIGN KEY (Card3) REFERENCES Card(Id)," +
+                "FOREIGN KEY (Card4) REFERENCES Card(Id)" +
                 ");";
         statement.execute(createDeckTable);
 /*
@@ -99,7 +102,7 @@ public class DataBaseHelper {
 
  */
         String createTradingDealTable = "CREATE TABLE IF NOT EXISTS TradingDeal (" +
-                "Id VARCHAR(50) PRIMARY KEY NOT NULL," +
+                "TradeId VARCHAR(100) PRIMARY KEY NOT NULL," +
                 "FromPlayer VARCHAR(50) NOT NULL," +
                 "ToPlayer VARCHAR(50) NOT NULL," +
                 "FOREIGN KEY (FromPlayer) REFERENCES \"User\"(Username)," +
@@ -118,9 +121,10 @@ public class DataBaseHelper {
 
         String createStackTable = "CREATE TABLE IF NOT EXISTS Stack (" +
                 "Owner VARCHAR(50) NOT NULL," +
-                "Card1 VARCHAR(50)," +
+                "CardId VARCHAR(100) NOT NULL," +
                 "FOREIGN KEY (Owner) REFERENCES  \"User\"(Username)," +
-                "FOREIGN KEY (Card1) REFERENCES Card(CardName)" +
+                "FOREIGN KEY (CardId) REFERENCES Card(Id)," +
+                "PRIMARY KEY (Owner, CardId)" + // Changed primary key to combination of Owner and CardId
                 ");";
         statement.execute(createStackTable);
 
@@ -134,11 +138,11 @@ public class DataBaseHelper {
                 "IsOwned BOOLEAN NOT NULL," +
                 "Owner VARCHAR(50)," +
                 "FOREIGN KEY (Owner) REFERENCES  \"User\"(Username)," +
-                "FOREIGN KEY (Card1) REFERENCES Card(CardName)," +
-                "FOREIGN KEY (Card2) REFERENCES Card(CardName)," +
-                "FOREIGN KEY (Card3) REFERENCES Card(CardName)," +
-                "FOREIGN KEY (Card4) REFERENCES Card(CardName)," +
-                "FOREIGN KEY (Card5) REFERENCES Card(CardName)" +
+                "FOREIGN KEY (Card1) REFERENCES Card(Id)," +
+                "FOREIGN KEY (Card2) REFERENCES Card(Id)," +
+                "FOREIGN KEY (Card3) REFERENCES Card(Id)," +
+                "FOREIGN KEY (Card4) REFERENCES Card(Id)," +
+                "FOREIGN KEY (Card5) REFERENCES Card(Id)" +
                 ");";
         statement.execute(createPackageTable);
     }

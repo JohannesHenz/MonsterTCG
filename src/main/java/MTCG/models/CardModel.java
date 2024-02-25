@@ -1,15 +1,32 @@
 package MTCG.models;
 
-import java.util.UUID;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+
+import java.util.UUID;
 
 public class CardModel {
 
+
+
+    @JsonProperty("Id")
     private UUID Id;
+
+    @JsonProperty("Name")
     private String Name;
+
+    @JsonProperty("Damage")
     private double Damage;
 
     // Getters and Setters
+    public CardModel() {}
+
+    public CardModel(UUID Id, String Name, double Damage) {
+        this.Id = Id;
+        this.Name = Name;
+        this.Damage = Damage;
+    }
 
     public UUID getId() {
         return Id;

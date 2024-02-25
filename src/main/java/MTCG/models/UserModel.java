@@ -1,5 +1,8 @@
 package MTCG.models;
 
+import MTCG.dal.repository.UserRepository;
+import MTCG.httpserver.server.Request;
+
 public class UserModel {
 
     String username;
@@ -7,6 +10,9 @@ public class UserModel {
     boolean isAdmin;
     int coinAmount;
     int ownedCardAmount;
+    String name;
+    String bio;
+    String image;
 
     public UserModel(String username, String password, boolean isAdmin) {
         this.username = username;
@@ -34,5 +40,39 @@ public class UserModel {
 
     public int getOwnedCardAmount() {
         return this.ownedCardAmount;
+    }
+
+    private UserModel getUserFromBearerToken(Request request) {
+        String authorizationHeader = request.getHeaderMap().getHeader("Authorization");
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String username = authorizationHeader.substring(7).split("-")[0];
+            UserRepository userRepository = UserRepository.getInstance();
+            return userRepository.getUserByUsername(username);
+        }
+        return null;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getBio() {
+        return this.bio;
+    }
+
+    public String getImage() {
+        return this.image;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

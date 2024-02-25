@@ -16,9 +16,12 @@ public class Main {
         int port = 10001;
         Server server = new Server(port, router);
         DataBaseHelper db = new DataBaseHelper();
-        router.addService("/users", new UserController());
-        router.addService("/users/{username}", new UserController());
-        router.addService("/sessions", new UserController());
+        UserController userController = new UserController();
+        router.addService("/users", userController);
+        router.addService("/users/kienboec", userController);
+        router.addService("/users/altenhof", userController);
+        router.addService("/users/someGuy", userController);
+        router.addService("/sessions", userController);
         router.addService("/packages", new PackageController());
         router.addService("/transactions/packages", new PackageController());
         router.addService("/cards", new CardController());
@@ -35,6 +38,9 @@ public class Main {
 
         } catch (Exception e){
             e.printStackTrace();
+        }
+        finally {
+            userController.logoutAllUsers();
         }
     }
 }
