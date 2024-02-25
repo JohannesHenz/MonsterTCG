@@ -81,26 +81,8 @@ public class DataBaseHelper {
                 "FOREIGN KEY (Card4) REFERENCES Card(Id)" +
                 ");";
         statement.execute(createDeckTable);
-/*
-
-        String createDeckTable = "CREATE TABLE IF NOT EXISTS Deck (" +
-                "DeckId SERIAL PRIMARY KEY," +
-                "Owner VARCHAR(50) NOT NULL," +
-                "FOREIGN KEY (Owner) REFERENCES  \"User\"(Username)" +
-                ");";
-
-        String createDeckCardTable = "CREATE TABLE IF NOT EXISTS DeckCard(" +
-                "DeckId INT NOT NULL," +
-                "CardName VARCHAR(50) NOT NULL," +
-                "FOREIGN KEY (DeckId) REFERENCES Deck(DeckId)," +
-                "FOREIGN KEY (CardName) REFERENCES Card(CardName)" +
-                ");";
-        statement.execute(createDeckTable);
-        statement.execute(createDeckCardTable);
 
 
-
- */
         String createTradingDealTable = "CREATE TABLE IF NOT EXISTS TradingDeal (" +
                 "TradeId VARCHAR(100) PRIMARY KEY NOT NULL," +
                 "FromPlayer VARCHAR(50) NOT NULL," +
@@ -111,7 +93,7 @@ public class DataBaseHelper {
         statement.execute(createTradingDealTable);
 
         String createStatsTable = "CREATE TABLE IF NOT EXISTS Stats (" +
-                " \"User\" VARCHAR(50) NOT NULL," +
+                " \"User\" VARCHAR(50) NOT NULL UNIQUE," +
                 "ELO INT NOT NULL," +
                 "Wins INT NOT NULL," +
                 "Losses INT NOT NULL," +
@@ -145,5 +127,12 @@ public class DataBaseHelper {
                 "FOREIGN KEY (Card5) REFERENCES Card(Id)" +
                 ");";
         statement.execute(createPackageTable);
+
+        String createScoreboardTable = "CREATE TABLE IF NOT EXISTS Scoreboard (" +
+                " \"User\" VARCHAR(50) NOT NULL PRIMARY KEY," +
+                "ELO INT NOT NULL," +
+                "FOREIGN KEY (\"User\") REFERENCES  \"User\"(Username)" +
+                ");";
+        statement.execute(createScoreboardTable);
     }
     }

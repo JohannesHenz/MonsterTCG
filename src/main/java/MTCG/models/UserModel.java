@@ -13,6 +13,9 @@ public class UserModel {
     String name;
     String bio;
     String image;
+    private int wins;
+    private int losses;
+    private int elo;
 
     public UserModel(String username, String password, boolean isAdmin) {
         this.username = username;
@@ -74,5 +77,28 @@ public class UserModel {
 
     public void setImage(String image) {
         this.image = image;
+    }
+    public int getWins() {
+        return wins;
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public int getLosses() {
+        return losses;
+    }
+
+    public void setLosses(int losses) {
+        this.losses = losses;
+    }
+
+    public int getELO() {
+        return elo;
+    }
+
+    public void setELO(int elo) {
+        this.elo = elo;
     }
 }

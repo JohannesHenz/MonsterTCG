@@ -78,7 +78,15 @@ public class UserUOW implements IUnitOfWork {
         this.coinAmount = coinAmount;
         this.ownedCardAmount = ownedCardAmount;
         this.query = "INSERT INTO \"User\" (Username, Password, IsAdmin, CoinAmount, OwnedCardAmount) VALUES (?, ?, ?, ?, ?)";
-        return commit();
+        boolean userCreated = commit();
+
+        if (userCreated) {
+            // If the user was created successfully, insert a record into the Stats table with initial ELO set to 100
+            this.query = "INSERT INTO Stats (\"User\", ELO, Wins, Losses) VALUES (?, 100, 0, 0)";
+            return commit();
+        }
+
+        return false;
     }
 
     public UserModel getUser(String username, String password) {

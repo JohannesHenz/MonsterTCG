@@ -28,6 +28,11 @@ public class CardModel {
         this.Damage = Damage;
     }
 
+    public CardModel(UUID Id, double Damage) {
+        this.Id = Id;
+        this.Damage = Damage;
+    }
+
     public UUID getId() {
         return Id;
     }
@@ -50,5 +55,19 @@ public class CardModel {
 
     public void setDamage(double damage) {
         Damage = damage;
+    }
+
+    public String getElementType() {
+        String elementType;
+
+        if (this.getName().contains("Water")) {
+            elementType = "Water";
+        } else if (this.getName().contains("Fire")) {
+            elementType = "Fire";
+        } else {
+            elementType = "Regular";
+
+        }
+        return elementType;
     }
 }
