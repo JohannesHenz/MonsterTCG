@@ -42,7 +42,6 @@ public class BattleController implements Service {
             }
         }
 
-            // If no conditions match, return a 404 response
             return new Response(
                     HttpStatus.NOT_FOUND,
                     ContentType.JSON,

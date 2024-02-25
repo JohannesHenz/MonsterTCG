@@ -29,7 +29,7 @@ public class StatController implements Service {
         return statService.getScoreboard();
 
         } else {
-            // If no conditions match, return a 404 response
+
             return new Response(
                     HttpStatus.NOT_FOUND,
                     ContentType.JSON,

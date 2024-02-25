@@ -61,7 +61,9 @@ public class UserController implements Service {
              String usernameInRoute = route.split("/")[2];
              return userService.getUserData(request, usernameInRoute);
 
-        }
+        } else if (request.getMethod() == Method.POST && request.getServiceRoute().equals("/upgradecard")) {
+             return userService.upgradeCard(request);
+         }
         else if ("GET".equalsIgnoreCase(String.valueOf(method)) && "/users/altenhof".equals(route)) {
             System.out.println(loggedInUsers);
             return userService.updateUser(request);
@@ -70,7 +72,7 @@ public class UserController implements Service {
             System.out.println(loggedInUsers);
             return userService.updateUser(request);
         }else {
-            // If no conditions match, return a 404 response
+
             return new Response(
                     HttpStatus.NOT_FOUND,
                     ContentType.JSON,

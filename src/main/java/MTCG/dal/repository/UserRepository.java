@@ -46,5 +46,9 @@ public class UserRepository {
     public UserModel getUserData(String username) {
         return userUOW.getUserData(username);
     }
+
+    public boolean decreaseCoins(String username, int amount) {
+        return userUOW.decreaseCoins(username, amount);
+    }
 }
 

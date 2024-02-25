@@ -28,6 +28,7 @@ public class Main {
         router.addService("/users/kienboec", userController);
         router.addService("/users/altenhof", userController);
         router.addService("/users/someGuy", userController);
+        router.addService("/upgradecard", userController);
         router.addService("/sessions", userController);
         router.addService("/packages", new PackageController());
         router.addService("/transactions/packages", new PackageController());

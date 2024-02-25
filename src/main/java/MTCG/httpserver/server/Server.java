@@ -40,7 +40,6 @@ public class Server {
                 executorService.submit(() -> {
                     requestHandler.run();
                    int battlePoolSize = battlePool.getPoolSize();
-                   System.out.println("Bois in the BattlePool: " + battlePoolSize);
 
                     //synchronized(battlePool) {
                         if (battlePoolSize >= 2) {

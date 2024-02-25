@@ -28,4 +28,8 @@ public class CardRepository {
         String insertDeckSql = "INSERT INTO Deck (Owner, Card1, Card2, Card3, Card4) VALUES (?, ?, ?, ?, ?)";
         return cardUOW.executeInsert(insertDeckSql, username, cardIds);
     }
+
+    public boolean upgradeCard(String username, String cardId, double amount) {
+        return cardUOW.upgradeCard(username, cardId, amount);
+    }
 }

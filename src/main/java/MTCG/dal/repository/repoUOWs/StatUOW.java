@@ -29,7 +29,6 @@ public class StatUOW {
                     userStats.setLosses(losses);
                     userStats.setELO(elo);
                 } else {
-                    // If the user's stats do not exist in the database, insert a new row with default values
                     String insertQuery = "INSERT INTO Stats (\"User\", Wins, Losses, ELO) VALUES (?, 0, 0, 0)";
                     try (PreparedStatement insertPreparedStatement = connection.prepareStatement(insertQuery)) {
                         insertPreparedStatement.setString(1, username);

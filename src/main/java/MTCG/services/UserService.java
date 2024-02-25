@@ -1,6 +1,7 @@
 package MTCG.services;
 
 import MTCG.controllers.UserController;
+import MTCG.dal.repository.CardRepository;
 import MTCG.dal.repository.UserRepository;
 import MTCG.httpserver.http.ContentType;
 import MTCG.httpserver.http.HttpStatus;
@@ -8,11 +9,15 @@ import MTCG.httpserver.server.Request;
 import MTCG.httpserver.server.Response;
 import MTCG.httpserver.server.Service;
 import MTCG.models.UserModel;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.util.Map;
 
 public class UserService implements Service {
 
     private UserRepository userRepository = UserRepository.getInstance();
     private UserController userController;
+    private CardRepository cardRepository = new CardRepository();
 
     public UserService(UserController userController, UserRepository userRepository) {
         this.userController = userController;
@@ -62,7 +67,7 @@ public class UserService implements Service {
                         "{'message': 'User login successful'}"
                 );
             } else {
-                // Add this return statement to handle the case where the password does not match
+
                 return new Response(
                         HttpStatus.UNAUTHORIZED,
                         ContentType.JSON,
@@ -101,6 +106,34 @@ public class UserService implements Service {
         }
 
         return new Response(HttpStatus.OK, ContentType.JSON, "{'message': 'Package successfully bought'}");
+    }
+
+    public Response upgradeCard(Request request) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, String> body;
+        try {
+            body = objectMapper.readValue(request.getBody(), new TypeReference<Map<String, String>>(){});
+        } catch (Exception e) {
+            return new Response(HttpStatus.BAD_REQUEST, ContentType.JSON, "{'message': 'Invalid JSON format'}");
+        }
+
+        String cardId = body.get("CardId");
+        if (cardId == null) {
+            return new Response(HttpStatus.BAD_REQUEST, ContentType.JSON, "{'message': 'CardId is missing'}");
+        }
+
+        String username = request.getHeaderMap().getHeader("Authorization").substring(7).split("-")[0];
+        UserModel user = userRepository.getUserByUsername(username);
+        if (user == null) {
+            return new Response(HttpStatus.UNAUTHORIZED, ContentType.JSON, "{'message': 'User not found'}");
+        }
+
+        boolean isCardUpgraded = cardRepository.upgradeCard(username, cardId, 10.0);
+        if (!isCardUpgraded) {
+            return new Response(HttpStatus.NOT_FOUND, ContentType.JSON, "{'message': 'Card not found or not enough coins'}");
+        }
+
+        return new Response(HttpStatus.OK, ContentType.JSON, "{'message': 'Card successfully upgraded'}");
     }
 
     public Response updateUser(Request request) {

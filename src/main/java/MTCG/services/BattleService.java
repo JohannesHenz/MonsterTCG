@@ -7,10 +7,6 @@ import MTCG.httpserver.http.ContentType;
 import MTCG.httpserver.http.HttpStatus;
 import MTCG.httpserver.server.Response;
 import MTCG.models.CardModel;
-import MTCG.models.MonsterCardModel;
-import MTCG.models.SpellCardModel;
-import MTCG.models.enums.ElementTypes;
-import MTCG.models.enums.CardNames;
 import MTCG.utils.BattleLog;
 import java.util.Random;
 import java.util.List;
@@ -109,25 +105,24 @@ public class BattleService {
         if (round < 100 && deck1.isEmpty()) {
             winner = player2;
                 battleRepository.updateStatsAfterBattle(player2, player1); //Player 1 hat gewonnen
-               //battleLog.logBattleWinner(player1);
+
             return new Response(HttpStatus.OK, ContentType.JSON, "{'message': 'The winner is " + winner + "'}");
             } else if (round < 100 && deck2.isEmpty()) {
             winner = player1;
                 battleRepository.updateStatsAfterBattle(player1, player2); //Player 2 hat gewonnen
             return new Response(HttpStatus.OK, ContentType.JSON, "{'message': 'The winner is " + winner + "'}");
-              // battleLog.logBattleWinner(player2);
+
             } else {
-               // battleLog.logBattleWinner("Draw");
-                // battleLog.printLog();
+
             System.out.println("The battle ended in a draw");
              return new Response(HttpStatus.OK, ContentType.JSON, "{'message': 'The battle ended in a draw'}");
         }
-        //battleLog.printLog();
+
 
     }
 
 
-    private CardModel monsterVsMonster(CardModel monster1, CardModel monster2) {
+    public CardModel monsterVsMonster(CardModel monster1, CardModel monster2) {
         System.out.println("Monster vs Monster Fight has begun between " + monster1.getName() + " and " + monster2.getName());
 
         if (monster1.getName().equals("Dragon") && monster2.getName().equals("Goblin")) {
@@ -152,7 +147,7 @@ public class BattleService {
         }
     }
 
-    private CardModel spellVsSpell(CardModel spell1, CardModel spell2) {
+    public CardModel spellVsSpell(CardModel spell1, CardModel spell2) {
         System.out.println("Spell vs Spell Fight has begun between " + spell1.getName() + " and " + spell2.getName());
         double spell1Damage = spell1.getDamage();
         double spell2Damage = spell2.getDamage();
@@ -218,7 +213,7 @@ public class BattleService {
         }
     }
 
-    private CardModel monsterVsSpell(CardModel monster, CardModel spell) {
+    public CardModel monsterVsSpell(CardModel monster, CardModel spell) {
         System.out.println("Monster vs Spell Fight has begun between " + monster.getName() + " and " + spell.getName());
 
         double spellDamage = spell.getDamage();
@@ -287,9 +282,9 @@ public class BattleService {
                 return spell;
             } else {
                 System.out.println("Monster Damage: " + monsterDamage);
-                System.out.println("Spell Damage: " + spellDamage);// In case of a draw, return null
+                System.out.println("Spell Damage: " + spellDamage);
                 System.out.println("Draw");
-                return null; // It's a draw
+                return null; // Wenn es ein Unentschieden gibt, dann wird null zurückgegeben
             }
         }
     }

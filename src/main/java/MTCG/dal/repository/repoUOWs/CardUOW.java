@@ -99,4 +99,22 @@ public class CardUOW {
         }
     }
 
+    public boolean upgradeCard(String username, String cardId, double amount) {
+        String sql = "UPDATE Card SET Damage = Damage + ? WHERE Id = ? AND Id IN (SELECT CardId FROM Stack WHERE Owner = ?)";
+        try (Connection connection = DriverManager.getConnection(CONNECTION_STRING, USER, PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setDouble(1, amount);
+            preparedStatement.setString(2, cardId);
+            preparedStatement.setString(3, username);
+            int affectedRows = preparedStatement.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
 }

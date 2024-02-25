@@ -45,7 +45,7 @@ public class UserModel {
         return this.ownedCardAmount;
     }
 
-    private UserModel getUserFromBearerToken(Request request) {
+    public UserModel getUserFromBearerToken(Request request) {
         String authorizationHeader = request.getHeaderMap().getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String username = authorizationHeader.substring(7).split("-")[0];

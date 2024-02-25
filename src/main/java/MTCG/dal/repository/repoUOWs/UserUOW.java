@@ -31,14 +31,10 @@ public class UserUOW implements IUnitOfWork {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {
-            // Establish a connection to the database
             conn = DriverManager.getConnection(CONNECTION_STRING, USER, PASSWORD);
-            // Create a statement
             pstmt = conn.prepareStatement(query);
             pstmt.setString(1, username);
-            // Execute the SQL query
             rs = pstmt.executeQuery();
-            // If the ResultSet has a next row, set exists to true
             if (rs.next()) {
                 exists = true;
             }
@@ -81,7 +77,7 @@ public class UserUOW implements IUnitOfWork {
         boolean userCreated = commit();
 
         if (userCreated) {
-            // If the user was created successfully, insert a record into the Stats table with initial ELO set to 100
+            // sobald der User erstellt wurde, wird auch ein Stats-Eintrag für ihn erstellt und die elo auf 100 gesetzt
             this.query = "INSERT INTO Stats (\"User\", ELO, Wins, Losses) VALUES (?, 100, 0, 0)";
             return commit();
         }
@@ -108,14 +104,11 @@ public class UserUOW implements IUnitOfWork {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {
-            // Establish a connection to the database
+            // Datenbankverbindung herstellen
             conn = DriverManager.getConnection(CONNECTION_STRING, USER, PASSWORD);
-            // Create a statement
             pstmt = conn.prepareStatement(query);
             pstmt.setString(1, username);
-            // Execute the SQL query
             rs = pstmt.executeQuery();
-            // If the ResultSet has a next row, create a new UserModel with the retrieved data
             if (rs.next()) {
                 String password = rs.getString("Password");
                 boolean isAdmin = rs.getBoolean("IsAdmin");
@@ -124,7 +117,6 @@ public class UserUOW implements IUnitOfWork {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // Close resources
             if (rs != null) {
                 try {
                     rs.close();
@@ -154,7 +146,7 @@ public class UserUOW implements IUnitOfWork {
         try (Connection connection = DriverManager.getConnection(CONNECTION_STRING, USER, PASSWORD)) {
             connection.setAutoCommit(false);
 
-            // Fetch the current coin amount from the database
+            // Die Anzahl der Coins des Users holen
             String selectCoinsSql = "SELECT CoinAmount FROM \"User\" WHERE Username = ?";
             PreparedStatement selectCoinsStmt = connection.prepareStatement(selectCoinsSql);
             selectCoinsStmt.setString(1, user.getUsername());
@@ -166,7 +158,7 @@ public class UserUOW implements IUnitOfWork {
 
             int currentCoinAmount = rs1.getInt("CoinAmount");
 
-            // Check if the user has enough coins
+            // Checken ob der User genug Coins hat
             if (currentCoinAmount < 5) {
                 return false;
             }
@@ -275,21 +267,36 @@ public class UserUOW implements IUnitOfWork {
         return user;
     }
 
+    public boolean decreaseCoins(String username, int amount) {
+        String sql = "UPDATE \"User\" SET CoinAmount = CoinAmount - ? WHERE Username = ? AND CoinAmount >= ?";
+        try (Connection connection = DriverManager.getConnection(CONNECTION_STRING, USER, PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, amount);
+            preparedStatement.setString(2, username);
+            preparedStatement.setInt(3, amount);
+            int affectedRows = preparedStatement.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @Override
     public boolean commit() {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {
-            // Establish a connection to the database
             conn = DriverManager.getConnection(CONNECTION_STRING, USER, PASSWORD);
-            // Disable auto-commit mode
+            // Auto-commit auf false setzen um Transaktionen zu ermöglichen
             conn.setAutoCommit(false);
 
-            // Create a statement
+
             pstmt = conn.prepareStatement(query);
 
-            // Set the parameters in the prepared statement
+
             pstmt.setString(1, username);
             if (password != null) {
                 pstmt.setString(2, password);
@@ -298,10 +305,10 @@ public class UserUOW implements IUnitOfWork {
                 pstmt.setInt(5, ownedCardAmount);
             }
 
-            // Execute the SQL query
+
             if (query.startsWith("SELECT")) {
                 rs = pstmt.executeQuery();
-                // If the ResultSet has a next row, return true
+
                 if (rs.next()) {
                     return true;
                 }
@@ -309,13 +316,12 @@ public class UserUOW implements IUnitOfWork {
                 pstmt.executeUpdate();
             }
 
-            // Commit the transaction
+
             conn.commit();
 
-            // If all steps are successful, return true
             return true;
         } catch (Exception e) {
-            // If any step fails, rollback the transaction
+
             if (conn != null) {
                 try {
                     conn.rollback();
@@ -326,7 +332,7 @@ public class UserUOW implements IUnitOfWork {
             e.printStackTrace();
             return false;
         } finally {
-            // Close resources
+
             if (rs != null) {
                 try {
                     rs.close();

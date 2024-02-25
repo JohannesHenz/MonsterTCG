@@ -16,8 +16,7 @@ public class CardService implements Service {
 
     @Override
     public Response handleRequest(Request request) {
-        // Implement the logic for handling the request here
-        // For now, return a default response
+
         return new Response(HttpStatus.NOT_IMPLEMENTED, ContentType.JSON, "{'message': 'Not implemented'}");
     }
 

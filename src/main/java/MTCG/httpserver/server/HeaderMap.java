@@ -28,4 +28,8 @@ public class HeaderMap {
     public void print() {
         System.out.println(headers);
     }
+
+    public void setHeader(String authorization, String s) {
+        headers.put(authorization, s);
+    }
 }

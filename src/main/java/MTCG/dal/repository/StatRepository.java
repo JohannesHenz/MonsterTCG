@@ -21,7 +21,6 @@ public class StatRepository {
         return statUOW.getScoreboard();
     }
 
-    // In StatRepository.java
     public void updateStatsAfterWin(String winner) {
         statUOW.updateStatsAfterWin(winner);
     }
@@ -29,4 +28,6 @@ public class StatRepository {
     public void updateStatsAfterLoss(String loser) {
         statUOW.updateStatsAfterLoss(loser);
     }
+
+
 }
